@@ -1,5 +1,6 @@
 package Grafos;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 
 public class Grafo {
@@ -271,8 +272,9 @@ void vmc(String origen,String destino){
     boolean addArista(String origen, String destino, int costo){
         Nodo o=busca(origen);
         Nodo d=busca(destino);
-        //para hacer aristas bilaterales:
-        addArista2(destino,origen,costo);
+        //para hacer aristas bilaterales: pero para el aeropuerto no se va a armar mi apa
+      
+     //   addArista2(destino,origen,costo);
         if(o!=null && d!=null ){
             Arista temp=new Arista(costo,d);
             Arista Aristatemp=o.primeraArista;
@@ -346,5 +348,64 @@ void vmc(String origen,String destino){
             }
         }
         return sb.toString();
+    }
+    ArrayList BuscaFinal(String origen, String destino, ArrayList al, ArrayList ArrDeCaminos) {
+        Nodo miNodo = busca(origen);
+        Arista ar = miNodo.primeraArista;
+
+        ArrayList<Arista> camino = new ArrayList<>();
+        camino = (ArrayList<Arista>) al.clone();
+        ArrayList<Arista> base = new ArrayList<>();
+        base = (ArrayList<Arista>) camino.clone();
+
+        if (!camino.contains(ar)) {
+            while (ar != null) {
+
+                Nodo Nodotemp = busca(ar.conector.nombre);
+                camino.add(ar);
+
+                if (destino.equals(ar.conector.nombre)) {
+                    System.out.println("llegué al destino");
+                    System.out.println(camino);
+                    System.out.println(" ");
+                    ArrDeCaminos.add(camino);
+
+                } else {
+                    if (Nodotemp.primeraArista != null) {
+                        BuscaFinal(ar.conector.nombre, destino, camino, ArrDeCaminos);
+                    }
+
+                }
+                ar = ar.sigArista;
+                camino = (ArrayList<Arista>) base.clone();
+            }
+        }
+        return camino;
+    }
+
+    int costos(ArrayList arr) {
+        int suma = 0;
+        return suma;
+    }
+
+    void probando2(String o, String d) {
+        Nodo miNodo = inicio;
+
+        do {
+            System.out.println("******  " + miNodo.nombre + "  ******");
+            Arista ar = miNodo.primeraArista;
+
+            while (ar != null) {
+                System.out.println(ar.conector.nombre);
+                System.out.println(ar.costo);
+
+                ar = ar.sigArista;
+
+            }
+
+            miNodo = miNodo.sigHermano;
+
+        } while (miNodo.sigHermano != null);
+
     }
 }
